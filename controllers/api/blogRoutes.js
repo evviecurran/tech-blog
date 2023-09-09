@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Blog } = require("../../models");
+const { Blog } = require("./models/blog.js");
 
 router.delete("/:id", async (req, res) => {
     try {

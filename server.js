@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3001;
 
 const hbs = exphbs.create({ helpers });
 
-// DO I NEED THIS ? 
+// Why is sess not appearing ? 
 
 const sess = {
     secret: "supes secret",
@@ -27,7 +27,7 @@ const sess = {
     resave: false,
     saveUninitialized: true, 
     store: new SequelizeStore({
-        db: dequelize,
+        db: sequelize,
     }),
 };
 

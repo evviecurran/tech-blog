@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const { Blog, User, Comments } = require("../models");
+
+//I am not calling User- find out why
+const { Blog, User, Comment } = require("../models");
 // Import the custom middleware
 const withAuth = require("../utils/auth");
 
@@ -7,7 +9,7 @@ const withAuth = require("../utils/auth");
 router.get("/", async (req, res) => {
   try {
     const blogData = await Blog.findAll({
-      include: Comments
+      include: Comment
     });
 // does it need to be capitol B for blogs
     const Blogs = blogData.map((blog) =>
@@ -29,10 +31,10 @@ router.get("/", async (req, res) => {
 router.get("/blog/:id", withAuth, async (req, res) => {
   try {
     const blogData = await Blog.findByPk(req.params.id, {
-      include: [Comments],
+      include: [Comment],
     });
 
-    const blog = blogData.get({ plain: true });
+    const Blog = blogData.get({ plain: true });
     res.render("blog", {
       ...blogData, 
       logged_in: req.session.logged_in,
