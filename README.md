@@ -1,7 +1,10 @@
 # tech-blog
 
 About the project
-I wanted to make an application where a user can go and create their own blog. This blog can be related to tech or what interests them the most. A user will be able to register, login/logout and create/save their own blog posts.  
+I wanted to make an application where a user can go and create their own blog. This blog can be related to tech or what interests them the most. A user will be able to register, login/logout and create/save their own blog posts. Currently, the project is able to be deployed with some bugs preventing it from being displayed fully. 
+
+![Screen Shot 2023-09-09 at 11 33 04 AM (2)](https://github.com/evviecurran/tech-blog/assets/125322606/878b3f8e-8fbb-4e9d-88bc-2c29cd01ace1)
+
 
 
 Built with
