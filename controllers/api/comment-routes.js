@@ -1,21 +1,18 @@
+const router = require("express").Router();
+const { Comment } = require("../../models");
+const withAuth = require("../../utils/auth");
 
-const router = require('express').Router();
-const { Comment } = require('../../models/');
-const withAuth = require('../../utils/auth');
-// double check the utils connection ^
-
-router.post('/', withAuth, (req, res) => {
-    Comment.create({ ...req.body, userId: req.session.userId }) 
+router.post("/", withAuth, (req, res) => {
+  Comment.create({ ...req.body, userId: req.session.userId })
     .then(newComment => {
-        res.json(newComment);
+      res.json(newComment);
     })
     .catch(err => {
-        res.status(500).json(err);
+      res.status(500).json(err);
     });
 });
 
-moule.exports = router
-
+module.exports = router;
 
 // const router = require("express").Router();
 
