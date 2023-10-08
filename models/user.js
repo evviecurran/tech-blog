@@ -8,6 +8,8 @@ class User extends Model {
     }
 }
 
+
+// user can login with said things listed 
 User.init (
     {
 id: {
@@ -39,19 +41,7 @@ password: {
     async beforeUpdate(updatedUserData) {
         updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
     },
-    // hooks: {
-    //     beforeCreate: async (newUserData) => {
-    //         newUserData.password = await bcrypt.hash(newUserData.password, 10);
-    //         return newUserData;
-    //     },
-    //     beforeUpdate: async (updatedUserData) => {
-    //         updatedUserData.password = await bcrypt.hash(
-    //             updatedUserData.password,
-    //             10
-    //         );
-    //         return updatedUserData;
-    //     },
-    // },
+    
     sequelize, 
     timestamps: false,
     freezeTableName: true, 
