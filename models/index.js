@@ -1,23 +1,23 @@
-const User = require('./User');
-const Post = require('./Post');
-const Comment = require('./Comment');
+import User from './User';
+import { belongsTo, hasMany } from './Post';
+import Comment, { belongsTo as _belongsTo } from './Comment';
 
-Post.belongsTo(User, {
+belongsTo(User, {
     foreignKey: 'userId',
     onDelete: 'CASCADE'
 });
 
-Post.hasMany(Comment, {
+hasMany(Comment, {
     foreignKey: 'postId',
     onDelete: 'CASCADE'
 });
 
-Comment.belongsTo(User, {
+_belongsTo(User, {
     foreignKey: 'userId',
     onDelete: 'CASCADE'
 });
 
-module.exports = {
+export default {
     User, 
     Comment, 
     Post
