@@ -1,12 +1,10 @@
+// middleware to verify user loggied in before restricted route access given
 const withAuth = (req, res, next) => {
-
-    if (!req.session.logged_in) {
-        //  does it need double ""
-        res.redirect('/login');
+    if (!req.session.userId) {
+      res.redirect("/login");
+    } else {
+      next();
     }
-    else {
-        next();
-    }
-};
-
-module.exports = withAuth; 
+  };
+  
+  module.exports = withAuth;

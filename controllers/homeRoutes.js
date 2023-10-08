@@ -1,73 +1,176 @@
 const router = require('express').Router();
+const { Post, Comment, User } = require('../models');
 
-//I am not calling User- find out why
-const { Blog, User, Comment } = require("../models");
-// Import the custom middleware
-const withAuth = require("../utils/auth");
+router.get('/', (req, res) => {
+    Post.findAll({
+        include: [User],
 
-// GET all blogs for homepage
-router.get("/", async (req, res) => {
-  try {
-    const blogData = await Blog.findAll({
-      include: Comment
+    })
+    .then((dbPostData) => {
+        const posts = dbPostData.map((post) => post.get({ plain: true }));
+
+        res.render('all-posts', { posts });
+    })
+    .catch((err) => {
+        res.status(500).json(err);
     });
-// does it need to be capitol B for blogs
-    const Blogs = blogData.map((blog) =>
-      blog.get({ plain: true })
-    );
-
-    res.render('homepage', {
-      Blogs,
-      loggedIn: req.session.logged_in,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
 });
 
-// GET one blog
-// Use the custom middleware before allowing the user to access the blog
-router.get("/blog/:id", withAuth, async (req, res) => {
-  try {
-    const blogData = await Blog.findByPk(req.params.id, {
-      include: [Comment],
-    });
+router.get('/post/:id', (req, res) => {
+    Post.findByPk(req.params.id, {
+        include: [
+            User, 
+            {
+                model: Comment,
+                include: [User],
+            },
+        ],
+    })
+    .then((dbPostData) => {
+        if (dbPostData) {
+            const post = dbPostData.get({ plain: true });
 
-    const Blog = blogData.get({ plain: true });
-    res.render("blog", {
-      ...blogData, 
-      logged_in: req.session.logged_in,
-    });
+            res.render('single-post', { post });
 
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
+        } else {
+            res.status(404).end();
+        }
+    })
+    .catch ((err) => {
+        res.status(500).json(err);
+    });
 });
-
-// // GET one painting
-// // Use the custom middleware before allowing the user to access the painting
-// router.get('/painting/:id', withAuth, async (req, res) => {
-//   try {
-//     const dbPaintingData = await Painting.findByPk(req.params.id);
-
-//     const painting = dbPaintingData.get({ plain: true });
-
-//     res.render('painting', { painting, loggedIn: req.session.loggedIn });
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json(err);
-//   }
-// });
 
 router.get('/login', (req, res) => {
-  if (req.session.logged_in) {
-    res.redirect('/');
-    return;
-  }
+    if (req.session.loggedIn) {
+        res.redirect('/');
+        return;
+    }
 
-  res.render('login');
+    res.removeListener('signup');
 });
 
-module.exports = router;
+module.exports = router; 
+
+
+
+// const sequelize = require('../config/connection');
+// const {
+//     User,
+//     Post,
+//     Comment
+// } = require('../models');
+
+
+// router.get('/', (req, res) => {
+//     Post.findAll({
+//             attributes: [
+//                 'id',
+//                 'title',
+//                 'content',
+//                 'created_at'
+//             ],
+//             include: [{
+//                     model: Comment,
+//                     attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+//                     include: {
+//                         model: User,
+//                         attributes: ['username']
+//                     }
+//                 },
+//                 {
+//                     model: User,
+//                     attributes: ['username']
+//                 }
+//             ]
+//         })
+//         .then(dbPostData => {
+//             const posts = dbPostData.map(post => post.get({
+//                 plain: true
+//             }));
+
+//             res.render('homepage', {
+//                 posts,
+//                 loggedIn: req.session.loggedIn
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json(err);
+//         });
+// });
+
+// router.get('/post/:id', (req, res) => {
+//     Post.findOne({
+//             where: {
+//                 id: req.params.id
+//             },
+//             attributes: [
+//                 'id',
+//                 'title',
+//                 'content',
+//                 'created_at'
+//             ],
+//             include: [{
+//                     model: Comment,
+//                     attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+//                     include: {
+//                         model: User,
+//                         attributes: ['username']
+//                     }
+//                 },
+//                 {
+//                     model: User,
+//                     attributes: ['username']
+//                 }
+//             ]
+//         })
+//         .then(dbPostData => {
+//             if (!dbPostData) {
+//                 res.status(404).json({
+//                     message: 'No post found with this id'
+//                 });
+//                 return;
+//             }
+
+//             const post = dbPostData.get({
+//                 plain: true
+//             });
+
+//             res.render('single-post', {
+//                 post,
+//                 loggedIn: req.session.loggedIn
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//             res.status(500).json(err);
+//         });
+// });
+
+// router.get('/login', (req, res) => {
+//     if (req.session.loggedIn) {
+//         res.redirect('/');
+//         return;
+//     }
+
+//     res.render('login');
+// });
+
+// router.get('/signup', (req, res) => {
+//     if (req.session.loggedIn) {
+//         res.redirect('/');
+//         return;
+//     }
+
+//     res.render('signup');
+// });
+
+
+// router.get('*', (req, res) => {
+//     res.status(404).send("Can't go there!");
+//     // res.redirect('/');
+// })
+
+
+// module.exports = router;

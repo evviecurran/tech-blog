@@ -1,18 +1,22 @@
-$(".login-button").click(async function (event) {
-    event.preventDefault();
-  
-   
-    const email = $("#email-form").val();
-    const password = $("#psswd-field").val();
-  
-   
-    const res = await fetch("/api/user/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
-  
-    if (res.ok) {
-      document.location.replace("/");
-    }
-  });
+const loginFormHandler = async function(event) {
+  event.preventDefault();
+
+  const usernameEl = document.querySelector("#username-input-login");
+  const passwordEl = document.querySelector("#password-input-login");
+  fetch("/api/user/login", {
+    method: "post",
+    body: JSON.stringify({
+      username: usernameEl.value,
+      password: passwordEl.value
+    }),
+    headers: { "Content-Type": "application/json" }
+  })
+    .then(function() {
+      document.location.replace("/dashboard");
+    })
+    .catch(err => console.log(err));
+};
+
+document
+  .querySelector("#login-form")
+  .addEventListener("submit", loginFormHandler);
