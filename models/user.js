@@ -48,14 +48,15 @@ User.init (
 
     async beforeUpdate(updatedUserData) {
         updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-    },
+      },
+      },
     
     sequelize, 
     timestamps: false,
     freezeTableName: true, 
     underscored: true, 
     modelName: 'user',
- }
+
 });
 
 module.exports = User;
