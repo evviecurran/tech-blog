@@ -12,25 +12,33 @@ class User extends Model {
 // user can login with said things listed 
 User.init (
     {
-id: {
-    type: DataTypes.INTEGER,
-    allowNull: false, 
-    primaryKey: true, 
-    autoIncrement: true,
-},
-username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-},
+        id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true,
+          },
+          name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+          },
+          email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+              isEmail: true,
+            },
+          },
+          password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+              len: [8],
+            },
+          },
+        },
 
-password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-        len:[4],  
-    },
-},
- },
  {
     hooks: {
     async beforeCreate(newUserData) {
@@ -46,7 +54,7 @@ password: {
     timestamps: false,
     freezeTableName: true, 
     underscored: true, 
-    modelName: 'User',
+    modelName: 'user',
  }
 });
 
