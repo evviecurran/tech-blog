@@ -1,53 +1,32 @@
-// import User from './User';
-// import { belongsTo, hasMany } from './Post';
-// import Comment, { belongsTo as _belongsTo } from './Comment';
+const User = require("./user");
+const Comments = require("./comments");
+const Blog = require("./blog");
 
-// belongsTo(User, {
-//     foreignKey: 'userId',
-//     onDelete: 'CASCADE'
-// });
-
-// hasMany(Comment, {
-//     foreignKey: 'postId',
-//     onDelete: 'CASCADE'
-// });
-
-// _belongsTo(User, {
-//     foreignKey: 'userId',
-//     onDelete: 'CASCADE'
-// });
-
-// export default {
-//     User, 
-//     Comment, 
-//     Post
-// };
-
-
-
-
-
-const User = require('./User');
-const Post = require('./Post');
-const Comment = require('./Comment');
-
-Post.belongsTo(User, {
-    foreignKey: 'userId',
-    onDelete: 'CASCADE'
+User.hasMany(Blog, {
+  foreignKey: "author_id",
+  onDelete: "SET NULL",
 });
 
-Post.hasMany(Comment, {
-    foreignKey: 'postId',
-    onDelete: 'CASCADE'
+User.hasMany(Comments, {
+  foreignKey: "author_id",
+  onDelete: "SET NULL",
 });
 
-Comment.belongsTo(User, {
-    foreignKey: 'userId',
-    onDelete: 'CASCADE'
+Blog.belongsTo(User, {
+  foreignKey: "author_id",
 });
 
-module.exports = {
-    User, 
-    Comment, 
-    Post
-};
+Blog.hasMany(Comments, {
+  foreignKey: "blog_id",
+  onDelete: "CASCADE",
+});
+
+Comments.belongsTo(User, {
+  foreignKey: "author_id",
+});
+
+Comments.belongsTo(Blog, {
+  foreignKey: "blog_id",
+});
+
+module.exports = { User, Comments, Blog };

@@ -1,12 +1,14 @@
-function logout() {
-  fetch("/api/user/logout", {
-    method: "post",
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(function() {
-      document.location.replace("/");
-    })
-    .catch(err => console.log(err));
-}
+$(".logout-button").click(async function (event) {
+  event.preventDefault();
 
-document.querySelector("#logout-link").addEventListener("click", logout);
+  //make api call to logout user
+  const res = await fetch("/api/user/logout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  // if the response returns as ok change the viewpage
+  if (res.ok) {
+    document.location.replace("/");
+  }
+});
